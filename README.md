@@ -1,6 +1,6 @@
-# Bridgework
+# 🚧 Bridgework 🚧
 
-WIP!!!
+**Status: Work in Progress**
 
 Bridgework is a visual integration debugger that helps implementation teams identify and correct data mismatches between connected systems.
 
