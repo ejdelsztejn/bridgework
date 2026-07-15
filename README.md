@@ -1,18 +1,29 @@
 # Bridgework
 
-To start your Phoenix server:
+WIP!!!
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+Bridgework is a visual integration debugger that helps implementation teams identify and correct data mismatches between connected systems.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Instead of digging through raw logs, users can inspect incoming JSON, understand why it does not match a target system’s requirements, map incompatible fields, preview the transformed payload, and test the corrected delivery.
 
-Ready to run in production? Please [check our deployment guides](https://phoenix.hexdocs.pm/deployment.html).
+### Example Use Case
 
-## Learn more
+An event-registration platform sends attendee information using fields such as `full_name` and `email_address`, while a CRM expects `name` and `email`. Bridgework makes those differences visible and helps the user resolve them.
 
-* Official website: https://www.phoenixframework.org/
-* Guides: https://phoenix.hexdocs.pm/overview.html
-* Docs: https://phoenix.hexdocs.pm
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+### Technology
+- Elixir
+- Phoenix
+- Phoenix LiveView
+- PostgreSQL
+- Tailwind CSS
+
+### Local Setup
+```
+mix deps.get
+mix ecto.setup
+mix phx.server
+```
+
+Then visit http://localhost:4000.
+
+*Bridgework is a focused demonstration of integration troubleshooting. It is not intended to be a general-purpose automation platform or a replacement for tools such as Zapier.*
