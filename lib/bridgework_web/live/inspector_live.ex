@@ -56,8 +56,16 @@ defmodule BridgeworkWeb.InspectorLive do
         <pre
           :if={@formatted_payload}
           id="parsed-preview"
-          class="overflow-x-auto rounded-lg bg-zinc-950 p-4 text-sm text-zinc-100"
-        >{@formatted_payload}</pre>
+          class="overflow-x-auto rounded-lg bg-zinc-950 p-4 text-sm text-zinc-100">
+          {@formatted_payload}
+        </pre>
+
+        <p
+          :if={@parse_error}
+          id="parse-error"
+          class="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          {@parse_error}
+        </p>
       </section>
     </main>
     """
@@ -75,7 +83,12 @@ defmodule BridgeworkWeb.InspectorLive do
         )}
 
       {:error, _reason} ->
-        {:noreply, socket}
+        {:noreply, assign(socket,
+          raw_payload: raw_payload,
+          formatted_payload: nil,
+          parse_error:
+            "This payload is not valid JSON. Please check the syntax and try again."
+        )}
     end
   end
 end
