@@ -37,7 +37,7 @@ defmodule Bridgework.SchemaValidatorTest do
     payload = %{
       "name" => "Melody Sampleton",
       "email" => "melody.sampleton@example.com",
-      "signup_date" => "07/15/2026",
+      "signup_date" => "2026-07-15",
       "source" => "website"
     }
 
