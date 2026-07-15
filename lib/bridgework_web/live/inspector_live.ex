@@ -1,6 +1,15 @@
 defmodule BridgeworkWeb.InspectorLive do
   use BridgeworkWeb, :live_view
 
+  alias Bridgework.SchemaValidator
+
+  @expected_fields [
+    "name",
+    "email",
+    "signup_date",
+    "source"
+  ]
+
   @sample_payload ~S"""
   {
     "full_name": "Melody Sampleton",
@@ -18,7 +27,8 @@ defmodule BridgeworkWeb.InspectorLive do
        page_description: "A bridge between your data and your applications.",
        raw_payload: @sample_payload,
        formatted_payload: nil,
-       parse_error: nil
+       parse_error: nil,
+       schema_comparison: nil
      )}
   end
 
@@ -74,11 +84,14 @@ defmodule BridgeworkWeb.InspectorLive do
   def handle_event("inspect", %{"payload" => raw_payload}, socket) do
     case Jason.decode(raw_payload) do
       {:ok, payload} ->
+        comparison = SchemaValidator.compare(payload, @expected_fields)
+
         {:noreply,
          assign(socket,
            raw_payload: raw_payload,
            formatted_payload: Jason.encode!(payload, pretty: true),
-           parse_error: nil
+           parse_error: nil,
+           schema_comparison: comparison
          )}
 
       {:error, _reason} ->
@@ -86,8 +99,9 @@ defmodule BridgeworkWeb.InspectorLive do
          assign(socket,
            raw_payload: raw_payload,
            formatted_payload: nil,
-           parse_error: "This payload is not valid JSON. Please check the syntax and try again."
-         )}
+           parse_error: "This payload is not valid JSON. Please check the syntax and try again.",
+           schema_comparison: nil
+           )}
     end
   end
 end
