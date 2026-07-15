@@ -3,8 +3,15 @@ defmodule Bridgework.SchemaValidator do
   def compare(payload, expected_fields) do
     payload_keys = Map.keys(payload)
 
-    missing_fields = Enum.filter(expected_fields, fn field -> not (field in payload_keys) end)
-    unexpected_fields = Enum.filter(payload_keys, fn key -> not (key in expected_fields) end)
+    missing_fields =
+      expected_fields
+      |> Enum.filter(fn field -> not (field in payload_keys) end)
+      |> Enum.sort()
+
+    unexpected_fields =
+      payload_keys
+      |> Enum.filter(fn key -> not (key in expected_fields) end)
+      |> Enum.sort()
 
     %{
       missing: missing_fields,

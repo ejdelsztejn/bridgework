@@ -19,7 +19,7 @@ defmodule Bridgework.SchemaValidatorTest do
     ]
 
     assert SchemaValidator.compare(payload, expected_fields) == %{
-             missing: ["name", "email", "signup_date", "source"],
+             missing: ["email", "name", "signup_date", "source"],
              unexpected: [
                "email_address",
                "full_name",
