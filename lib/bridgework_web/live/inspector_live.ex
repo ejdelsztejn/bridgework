@@ -76,6 +76,63 @@ defmodule BridgeworkWeb.InspectorLive do
           {@parse_error}
         </p>
       </section>
+      <section
+        :if={@schema_comparison}
+        id="schema-comparison"
+        class="mt-8 grid gap-6 md:grid-cols-2"
+      >
+        <div class="rounded-lg border border-amber-200 bg-amber-50 p-5">
+          <h2 class="font-semibold text-amber-950">Missing fields</h2>
+
+          <p
+            :if={@schema_comparison.missing == []}
+            id="no-missing-fields"
+            class="mt-3 text-amber-800"
+          >
+            No missing fields.
+          </p>
+
+          <ul
+            :if={@schema_comparison.missing != []}
+            id="missing-fields"
+            class="mt-3 space-y-2"
+          >
+            <li
+              :for={field <- @schema_comparison.missing}
+              data-field={field}
+              class="font-mono text-sm text-amber-900"
+            >
+              {field}
+            </li>
+          </ul>
+        </div>
+
+        <div class="rounded-lg border border-blue-200 bg-blue-50 p-5">
+          <h2 class="font-semibold text-blue-950">Unexpected fields</h2>
+
+          <p
+            :if={@schema_comparison.unexpected == []}
+            id="no-unexpected-fields"
+            class="mt-3 text-blue-800"
+          >
+            No unexpected fields.
+          </p>
+
+          <ul
+            :if={@schema_comparison.unexpected != []}
+            id="unexpected-fields"
+            class="mt-3 space-y-2"
+          >
+            <li
+              :for={field <- @schema_comparison.unexpected}
+              data-field={field}
+              class="font-mono text-sm text-blue-900"
+            >
+              {field}
+            </li>
+          </ul>
+        </div>
+      </section>
     </main>
     """
   end
@@ -101,7 +158,7 @@ defmodule BridgeworkWeb.InspectorLive do
            formatted_payload: nil,
            parse_error: "This payload is not valid JSON. Please check the syntax and try again.",
            schema_comparison: nil
-           )}
+         )}
     end
   end
 end

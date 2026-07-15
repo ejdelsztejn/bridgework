@@ -38,6 +38,7 @@ defmodule BridgeworkWeb.InspectorLiveTest do
 
     assert has_element?(view, "#parse-error")
     refute has_element?(view, "#parsed-preview")
+    refute has_element?(view, "#schema-comparison")
 
     view
     |> form("#payload-form", %{"payload" => ~s({"name":"Jessy"})})
@@ -45,13 +46,14 @@ defmodule BridgeworkWeb.InspectorLiveTest do
 
     assert has_element?(view, "#parsed-preview")
     refute has_element?(view, "#parse-error")
+    assert has_element?(view, "#schema-comparison")
   end
 
   test "displays missing and unexpected fields", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
 
     payload =
-        ~s({
+      ~s({
         "full_name": "Melody Sampleton",
         "email_address": "melody.sampleton@example.com",
         "registered_at": "07/15/2026",
@@ -67,13 +69,13 @@ defmodule BridgeworkWeb.InspectorLiveTest do
     assert has_element?(view, ~s(#missing-fields [data-field="email"]))
 
     assert has_element?(
-            view,
-            ~s(#unexpected-fields [data-field="full_name"])
-            )
+             view,
+             ~s(#unexpected-fields [data-field="full_name"])
+           )
 
     assert has_element?(
-            view,
-            ~s(#unexpected-fields [data-field="email_address"])
-            )
-    end
+             view,
+             ~s(#unexpected-fields [data-field="email_address"])
+           )
+  end
 end
