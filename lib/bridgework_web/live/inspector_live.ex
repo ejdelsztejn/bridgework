@@ -14,12 +14,12 @@ defmodule BridgeworkWeb.InspectorLive do
   def mount(_params, _session, socket) do
     {:ok,
      assign(socket,
-      page_title: "Bridgework",
-      page_description: "A bridge between your data and your applications.",
-      raw_payload: @sample_payload,
-      formatted_payload: nil,
-      parse_error: nil
-    )}
+       page_title: "Bridgework",
+       page_description: "A bridge between your data and your applications.",
+       raw_payload: @sample_payload,
+       formatted_payload: nil,
+       parse_error: nil
+     )}
   end
 
   @impl true
@@ -56,14 +56,16 @@ defmodule BridgeworkWeb.InspectorLive do
         <pre
           :if={@formatted_payload}
           id="parsed-preview"
-          class="overflow-x-auto rounded-lg bg-zinc-950 p-4 text-sm text-zinc-100">
+          class="overflow-x-auto rounded-lg bg-zinc-950 p-4 text-sm text-zinc-100"
+        >
           {@formatted_payload}
         </pre>
 
         <p
           :if={@parse_error}
           id="parse-error"
-          class="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          class="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800"
+        >
           {@parse_error}
         </p>
       </section>
@@ -76,19 +78,19 @@ defmodule BridgeworkWeb.InspectorLive do
     case Jason.decode(raw_payload) do
       {:ok, payload} ->
         {:noreply,
-        assign(socket,
-          raw_payload: raw_payload,
-          formatted_payload: Jason.encode!(payload, pretty: true),
-          parse_error: nil
-        )}
+         assign(socket,
+           raw_payload: raw_payload,
+           formatted_payload: Jason.encode!(payload, pretty: true),
+           parse_error: nil
+         )}
 
       {:error, _reason} ->
-        {:noreply, assign(socket,
-          raw_payload: raw_payload,
-          formatted_payload: nil,
-          parse_error:
-            "This payload is not valid JSON. Please check the syntax and try again."
-        )}
+        {:noreply,
+         assign(socket,
+           raw_payload: raw_payload,
+           formatted_payload: nil,
+           parse_error: "This payload is not valid JSON. Please check the syntax and try again."
+         )}
     end
   end
 end
