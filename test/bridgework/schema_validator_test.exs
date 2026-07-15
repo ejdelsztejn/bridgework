@@ -28,4 +28,20 @@ defmodule Bridgework.SchemaValidatorTest do
              ]
            }
   end
+
+  test "reports an empty payload as missing all expected fields" do
+    payload = %{}
+
+    expected_fields = [
+      "name",
+      "email",
+      "signup_date",
+      "source"
+    ]
+
+    assert SchemaValidator.compare(payload, expected_fields) == %{
+             missing: ["email", "name", "signup_date", "source"],
+             unexpected: []
+           }
+  end
 end
