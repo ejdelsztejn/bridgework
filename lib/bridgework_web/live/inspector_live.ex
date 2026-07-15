@@ -41,13 +41,9 @@ defmodule BridgeworkWeb.InspectorLive do
           id="raw-payload"
           name="payload"
           rows="14"
-          class="mt-2 w-full rounded-lg border border-zinc-300 p-4 font-mono text-sm"
-        >{@raw_payload}</textarea>
+          class="mt-2 w-full rounded-lg border border-zinc-300 p-4 font-mono text-sm">{@raw_payload}</textarea>
 
-        <button
-          type="submit"
-          class="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-white"
-        >
+        <button type="submit" class="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-white">
           Inspect payload
         </button>
       </form>

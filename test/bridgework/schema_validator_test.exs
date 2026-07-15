@@ -44,4 +44,37 @@ defmodule Bridgework.SchemaValidatorTest do
              unexpected: []
            }
   end
+
+  test "reports perfectly matching payload as having no missing or unexpected fields" do
+    payload = %{
+      "name" => "Melody Sampleton",
+      "email" => "melody.sampleton@example.com",
+      "signup_date" => "07/15/2026",
+      "source" => "website"
+    }
+
+    expected_fields = [
+      "name",
+      "email",
+      "signup_date",
+      "source"
+    ]
+
+    assert SchemaValidator.compare(payload, expected_fields) == %{
+             missing: [],
+             unexpected: []
+           }
+  end
+
+  test "reports only the fields that differ in a partial match" do
+  payload = %{
+    "name" => "Melody Sampleton",
+    "email_address" => "melody.sampleton@example.com"
+  }
+
+  assert SchemaValidator.compare(payload, @expected_fields) == %{
+           missing: ["email", "signup_date", "source"],
+           unexpected: ["email_address"]
+         }
+  end
 end
