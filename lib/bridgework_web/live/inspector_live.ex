@@ -51,7 +51,31 @@ defmodule BridgeworkWeb.InspectorLive do
           Inspect payload
         </button>
       </form>
+
+      <section class="mt-8" aria-live="polite">
+        <pre
+          :if={@formatted_payload}
+          id="parsed-preview"
+          class="overflow-x-auto rounded-lg bg-zinc-950 p-4 text-sm text-zinc-100"
+        >{@formatted_payload}</pre>
+      </section>
     </main>
     """
+  end
+
+  @impl true
+  def handle_event("inspect", %{"payload" => raw_payload}, socket) do
+    case Jason.decode(raw_payload) do
+      {:ok, payload} ->
+        {:noreply,
+        assign(socket,
+          raw_payload: raw_payload,
+          formatted_payload: Jason.encode!(payload, pretty: true),
+          parse_error: nil
+        )}
+
+      {:error, _reason} ->
+        {:noreply, socket}
+    end
   end
 end

@@ -20,6 +20,6 @@ defmodule BridgeworkWeb.InspectorLiveTest do
     |> form("#payload-form", %{"payload" => payload})
     |> render_submit()
 
-    assert has_element?(view, "#parsed-previw", "Jessy Eej Delman")
+    assert has_element?(view, "#parsed-preview", "Jessy Eej Delman")
   end
 end
