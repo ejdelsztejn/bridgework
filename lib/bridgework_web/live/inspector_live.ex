@@ -26,6 +26,13 @@ defmodule BridgeworkWeb.InspectorLive do
   def render(assigns) do
     ~H"""
       <h1 class="text-3xl font-semibold text-zinc-900">Bridgework</h1>
+
+    <textarea
+      id="raw-payload"
+      name="payload"
+      rows="14"
+      class="mt-2 w-full rounded-lg border border-zinc-300 p-4 font-mono text-sm"
+    >{@raw_payload}</textarea>
     """
   end
 end
