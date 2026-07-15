@@ -17,7 +17,7 @@ defmodule BridgeworkWeb.Router do
   scope "/", BridgeworkWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", InspectorLive
   end
 
   # Other scopes may use custom stacks.
