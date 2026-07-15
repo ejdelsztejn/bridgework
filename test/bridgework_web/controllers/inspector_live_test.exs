@@ -7,5 +7,6 @@ defmodule BridgeworkWeb.InspectorLiveTest do
     {:ok, view, _html} = live(conn, "/")
 
     assert has_element?(view, "h1", "Bridgework")
+    assert has_element?(view, "#raw-payload")
   end
 end
