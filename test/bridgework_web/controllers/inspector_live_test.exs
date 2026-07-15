@@ -78,4 +78,48 @@ defmodule BridgeworkWeb.InspectorLiveTest do
              ~s(#unexpected-fields [data-field="email_address"])
            )
   end
+
+  test "applies suggested mappings and displays the transformed payload", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+
+    payload =
+      ~s({
+        "full_name": "Melody Sampleton",
+        "email_address": "melody.sampleton@example.com",
+        "registered_at": "07/15/2026",
+        "ticket_type": "general"
+        })
+
+    view
+    |> form("#payload-form", %{"payload" => payload})
+    |> render_submit()
+
+    assert has_element?(view, "#apply-suggested-mappings")
+
+    view
+    |> element("#apply-suggested-mappings")
+    |> render_click()
+
+    assert has_element?(view, "#transformed-preview", "Melody Sampleton")
+
+    refute has_element?(
+             view,
+             ~s(#missing-fields [data-field="name"])
+           )
+
+    refute has_element?(
+             view,
+             ~s(#missing-fields [data-field="email"])
+           )
+
+    assert has_element?(
+             view,
+             ~s(#missing-fields [data-field="source"])
+           )
+
+    assert has_element?(
+             view,
+             ~s(#unexpected-fields [data-field="ticket_type"])
+           )
+  end
 end

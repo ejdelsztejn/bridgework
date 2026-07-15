@@ -1,6 +1,7 @@
 defmodule BridgeworkWeb.InspectorLive do
   use BridgeworkWeb, :live_view
 
+  alias Bridgework.PayloadTransformer
   alias Bridgework.SchemaValidator
 
   @expected_fields [
@@ -19,6 +20,12 @@ defmodule BridgeworkWeb.InspectorLive do
   }
   """
 
+  @suggested_mappings %{
+    "full_name" => "name",
+    "email_address" => "email",
+    "registered_at" => "signup_date"
+  }
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
@@ -28,7 +35,9 @@ defmodule BridgeworkWeb.InspectorLive do
        raw_payload: @sample_payload,
        formatted_payload: nil,
        parse_error: nil,
-       schema_comparison: nil
+       schema_comparison: nil,
+       parsed_payload: nil,
+       transformed_payload: nil
      )}
   end
 
@@ -132,6 +141,29 @@ defmodule BridgeworkWeb.InspectorLive do
             </li>
           </ul>
         </div>
+        <div class="md:col-span-2">
+          <button
+            id="apply-suggested-mappings"
+            type="button"
+            phx-click="apply_mappings"
+            class="rounded-lg bg-zinc-900 px-4 py-2 text-white"
+          >
+            Apply suggested mappings
+          </button>
+        </div>
+      </section>
+      <section
+        :if={@transformed_payload}
+        class="mt-8"
+      >
+        <h2 class="font-semibold text-zinc-900">Transformed payload</h2>
+
+        <pre
+          id="transformed-preview"
+          class="mt-3 overflow-x-auto rounded-lg bg-zinc-950 p-4 text-sm text-zinc-100"
+        >
+          {Jason.encode!(@transformed_payload, pretty: true)}
+        </pre>
       </section>
     </main>
     """
@@ -148,7 +180,9 @@ defmodule BridgeworkWeb.InspectorLive do
            raw_payload: raw_payload,
            formatted_payload: Jason.encode!(payload, pretty: true),
            parse_error: nil,
-           schema_comparison: comparison
+           schema_comparison: comparison,
+           parsed_payload: payload,
+           transformed_payload: nil
          )}
 
       {:error, _reason} ->
@@ -157,8 +191,27 @@ defmodule BridgeworkWeb.InspectorLive do
            raw_payload: raw_payload,
            formatted_payload: nil,
            parse_error: "This payload is not valid JSON. Please check the syntax and try again.",
-           schema_comparison: nil
+           schema_comparison: nil,
+           parsed_payload: nil,
+           transformed_payload: nil
          )}
     end
+  end
+
+  def handle_event("apply_mappings", _params, socket) do
+    transformed_payload =
+      PayloadTransformer.apply_mappings(
+        socket.assigns.parsed_payload,
+        @suggested_mappings
+      )
+
+    comparison =
+      SchemaValidator.compare(transformed_payload, @expected_fields)
+
+    {:noreply,
+     assign(socket,
+       transformed_payload: transformed_payload,
+       schema_comparison: comparison
+     )}
   end
 end
