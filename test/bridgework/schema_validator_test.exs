@@ -3,6 +3,8 @@ defmodule Bridgework.SchemaValidatorTest do
 
   alias Bridgework.SchemaValidator
 
+  @expected_fields ["name", "email", "signup_date", "source"]
+
   test "reports missing and unexpected fields" do
     payload = %{
       "full_name" => "Melody Sampleton",
@@ -11,14 +13,7 @@ defmodule Bridgework.SchemaValidatorTest do
       "ticket_type" => "general"
     }
 
-    expected_fields = [
-      "name",
-      "email",
-      "signup_date",
-      "source"
-    ]
-
-    assert SchemaValidator.compare(payload, expected_fields) == %{
+    assert SchemaValidator.compare(payload, @expected_fields) == %{
              missing: ["email", "name", "signup_date", "source"],
              unexpected: [
                "email_address",
@@ -32,14 +27,7 @@ defmodule Bridgework.SchemaValidatorTest do
   test "reports an empty payload as missing all expected fields" do
     payload = %{}
 
-    expected_fields = [
-      "name",
-      "email",
-      "signup_date",
-      "source"
-    ]
-
-    assert SchemaValidator.compare(payload, expected_fields) == %{
+    assert SchemaValidator.compare(payload, @expected_fields) == %{
              missing: ["email", "name", "signup_date", "source"],
              unexpected: []
            }
@@ -53,28 +41,21 @@ defmodule Bridgework.SchemaValidatorTest do
       "source" => "website"
     }
 
-    expected_fields = [
-      "name",
-      "email",
-      "signup_date",
-      "source"
-    ]
-
-    assert SchemaValidator.compare(payload, expected_fields) == %{
+    assert SchemaValidator.compare(payload, @expected_fields) == %{
              missing: [],
              unexpected: []
            }
   end
 
   test "reports only the fields that differ in a partial match" do
-  payload = %{
-    "name" => "Melody Sampleton",
-    "email_address" => "melody.sampleton@example.com"
-  }
+    payload = %{
+      "name" => "Melody Sampleton",
+      "email_address" => "melody.sampleton@example.com"
+    }
 
-  assert SchemaValidator.compare(payload, @expected_fields) == %{
-           missing: ["email", "signup_date", "source"],
-           unexpected: ["email_address"]
-         }
+    assert SchemaValidator.compare(payload, @expected_fields) == %{
+             missing: ["email", "signup_date", "source"],
+             unexpected: ["email_address"]
+           }
   end
 end
