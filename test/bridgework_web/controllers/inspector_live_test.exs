@@ -22,4 +22,28 @@ defmodule BridgeworkWeb.InspectorLiveTest do
 
     assert has_element?(view, "#parsed-preview", "Jessy Eej Delman")
   end
+
+  test "clears the previous result when the next submission changes", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/")
+
+    view
+    |> form("#payload-form", %{"payload" => ~s({"name":"Jessy"})})
+    |> render_submit()
+
+    assert has_element?(view, "#parsed-preview")
+
+    view
+    |> form("#payload-form", %{"payload" => ~s({"name":})})
+    |> render_submit()
+
+    assert has_element?(view, "#parse-error")
+    refute has_element?(view, "#parsed-preview")
+
+    view
+    |> form("#payload-form", %{"payload" => ~s({"name":"Jessy"})})
+    |> render_submit()
+
+    assert has_element?(view, "#parsed-preview")
+    refute has_element?(view, "#parse-error")
+  end
 end
