@@ -8,5 +8,6 @@ defmodule BridgeworkWeb.InspectorLiveTest do
 
     assert has_element?(view, "h1", "Bridgework")
     assert has_element?(view, "#raw-payload")
+    assert has_element?(view, "#payload-form")
   end
 end
